@@ -1,0 +1,32 @@
+
+###################################
+### 몬테카를로 시뮬레이션 
+###################################
+# 현실적으로 불가능한 문제의 해답을 얻기 위해서 난수의 확률분포를 이용하여 
+# 모의시험으로 근사적 해를 구하는 기법
+
+# 동전 앞/뒤 난수 확률분포 함수 
+coin <- function(n){
+  r <- runif(n, min=0, max=1)
+  #print(r) # n번 시행 
+  
+  result <- numeric()
+  for (i in 1:n){
+    if (r[i] <= 0.5)
+      result[i] <- 0 # 앞면 
+    else 
+      result[i] <- 1 # 뒷면
+  }
+  return(result)
+}
+
+
+# 몬테카를로 시뮬레이션 
+montaCoin <- function(n){
+  cnt <- 0
+  for(i in 1:n){
+    cnt <- cnt + coin(1) # 동전 함수 호출 
+  }
+  result <- cnt / n
+  return(result)
+}

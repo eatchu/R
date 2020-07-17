@@ -1,0 +1,25 @@
+﻿###################################
+## 2. 다중회귀분석
+###################################
+# - 여러 개의 독립변수 -> 종속변수에 미치는 영향 분석
+# 가설 : 음료수 제품의 적절성(x1)과 친밀도(x2)는 제품 만족도(y)에 정의 영향을 미친다.
+
+product <- read.csv("C:/Rwork-I/Part-IV/product.csv", header=TRUE)
+head(product) # 친밀도 적절성 만족도(등간척도 - 5점 척도)
+
+
+#(1) 적절성 + 친밀도 -> 만족도  
+y = product$'제품_만족도' # 종속변수
+x1 = product$'제품_친밀도' # 독립변수2
+x2 = product$'제품_적절성' # 독립변수1
+
+df <- data.frame(x1, x2, y)
+
+result.lm <- lm(formula=y ~ x1 + x2, data=df)
+#result.lm <- lm(formula=y ~ ., data=df)
+
+# 계수 확인 
+result.lm
+
+summary(result.lm)
+

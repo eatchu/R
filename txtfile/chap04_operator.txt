@@ -1,0 +1,53 @@
+# <실습> 산술연산자 
+num1 <- 100 # 피연산자1
+num2 <- 20  # 피연산자2
+result <- num1 + num2 # 덧셈
+result # 120
+result <- num1 - num2 # 뺄셈
+result # 80
+result <- num1 * num2 # 곱셈
+result # 2000
+result <- num1 / num2 # 나눗셈
+result # 5
+
+result <- num1 %% num2 # 나머지 계산
+result # 0
+
+result <- num1^2 # 제곱 계산(num1 ** 2)
+result # 10000
+result <- num1^num2 # 100의 20승
+result # 1e+40 -> 1 * 10의 40승과 동일한 결과
+
+
+# <실습> 관계연산자 
+# (1) 동등비교 
+boolean <- num1 == num2 # 두 변수의 값이 같은지 비교
+boolean # FALSE
+boolean <- num1 != num2 # 두 변수의 값이 다른지 비교
+boolean # TRUE
+
+# (2) 크기비교 
+boolean <- num1 > num2 # num1값이 큰지 비교
+boolean # TRUE
+boolean <- num1 >= num2 # num1값이 크거나 같은지 비교 
+boolean # TRUE
+boolean <- num1 < num2 # num2 이 큰지 비교
+boolean # FALSE
+boolean <- num1 <= num2 # num2 이 크거나 같은지 비교
+boolean # FALSE
+
+# <실습> 논리연산자(and, or, not, xor)
+logical <- num1 >= 50 & num2 <=10 # 두 관계식이 같은지 판단 
+logical # FALSE
+logical <- num1 >= 50 | num2 <=10 # 두 관계식 중 하나라도 같은지 판단
+logical # TRUE
+
+logical <- num1 >= 50 # 관계식 판단
+logical # TRUE
+logical <- !(num1 >= 50) # 괄호 안의 관계식 판단 결과에 대한 부정
+logical # FALSE
+
+x <- TRUE; y <- FALSE
+xor(x,y) # [1] TRUE
+x <- TRUE; y <- TRUE
+xor(x,y) # FALSE

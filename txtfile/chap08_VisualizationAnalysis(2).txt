@@ -1,0 +1,130 @@
+﻿###########################################
+# 2. ggplot2 패키지
+###########################################
+# ggplot2 그래픽 패키지
+# 기하학적 객체들(점,선,막대 등)에 미적 특성(색상, 모양,크기)를 
+# 맵핑하여 플로팅한다.
+# 그래픽 생성 기능과 통계변환을 포함할 수 있다.
+# ggplot2의 기본 함수 qplot()
+# geoms(점,선 등) 속성, aes(크기,모양,색상) 속성 사용
+# dataframe 데이터셋 이용(변환 필요)
+###########################################
+
+
+#install.packages("ggplot2") # 패키지 설치
+library(ggplot2)
+
+data(mpg) # 데이터 셋 가져오기
+str(mpg) # map 데이터 셋 구조 보기
+head(mpg) # map 데이터 셋 내용 보기 
+summary(mpg) # 요약 통계량
+table(mpg$drv) # 구동방식 빈도수 
+################ mpg 데이터셋 #################
+# ggplot2에서 제공하는 데이터셋
+# 'data.frame':	234 obs. of  11 variables:
+# 주요 변수 : displ:엔진크기, cyl : 실린더수,
+#      drv(구동방식) ->사륜구동(4), 전륜구동(f), 후륜구동(r)
+###################################################
+
+
+# 1. ggplot()함수
+help(qplot)
+
+# (1) 1개 변수 대상 기본 - x축 기준 도수분포도
+qplot(hwy, data=mpg) 
+
+#  fill 옵션 : hwy 변수를 대상으로 drv변수에 색 채우기 
+qplot(hwy, data=mpg, fill=drv) # fill 옵션 적용
+
+# binwidth 옵션 : 도수 폭 지정 속성
+qplot(hwy, data=mpg, fill=drv, binwidth=2) # binwidth 옵션 적용 
+
+# facets 옵션 : drv변수 값으로 열단위/행단위 패널 생성
+qplot(hwy, data=mpg, fill=drv, facets=.~ drv, binwidth=2) # 열 단위 패널 생성
+qplot(hwy, data=mpg, fill=drv, facets=drv~., binwidth=2) # 행 단위 패널 생성
+
+
+# (2) 2변수 대상 기본 - 속이 꽉찬 점 모양과 점의 크기는 1를 갖는 산점도 그래프
+qplot(displ, hwy, data=mpg)# mpg 데이터셋의 displ과 hwy변수 이용
+
+# displ, hwy 변수 대상으로 drv변수값으로 색상 적용 산점도 그래프
+qplot(displ, hwy, data=mpg, color=drv)
+
+
+# (3) 색상, 크기, 모양 적용
+### ggplot2 패키지 제공 데이터 셋
+head(mtcars)
+str(mtcars) # ggplot2에서 제공하는 데이터 셋
+#주요 변수 
+# mpg(연비), cyl(실린더 수), displ(엔진크기), hp(마력), wt(중량), 
+# qsec(1/4마일 소요시간), am(변속기:0=오토,1=수동), gear(앞쪽 기어 수), carb(카뷰레터 수) 
+
+qplot(wt, mpg, data=mtcars, color=factor(carb)) # 색상 적용
+qplot(wt, mpg, data=mtcars, size=qsec, color=factor(carb)) # 크기 적용
+qplot(wt, mpg, data=mtcars, size=qsec, color=factor(carb), shape=factor(cyl))#모양 적용 
+mtcars$qsec
+
+
+# (4) geom 속성  
+### ggplot2 패키지 제공 데이터 셋
+head(diamonds) 
+str(diamonds)
+# 주요 변수 
+# price : 다이아몬드 가격($326~$18,823), carat :다이아몬드 무게 (0.2~5.01), 
+# cut : 컷의 품질(Fair,Good,Very Good, Premium Ideal),
+# color : 색상(J:가장나쁨 ~ D:가장좋음), 
+# clarity : 선명도(I1:가장나쁨, SI1, SI1, VS1, VS2, VVS1, VVS2, IF:가장좋음), 
+# x: 길이, y : 폭
+
+
+# geom 속성 : 차트 유형, clarity변수 대상 cut변수로 색 채우기
+qplot(clarity, data=diamonds, fill=cut, geom="bar") #geom="bar" : 막대차트 
+
+# qplot(wt, mpg, data=mtcars, size=qsec) # geom="point" : 산점도
+qplot(wt, mpg, data=mtcars, size=qsec, geom="point")
+# cyl 변수의 요인으로 point 크기 적용, carb 변수의 요인으로 포인트 색 적용
+qplot(wt, mpg, data=mtcars, size=factor(cyl), color=factor(carb), geom="point")
+# qsec변수로 포인트 크기 적용, cyl 변수의 요인으로 point 모양 적용
+qplot(wt, mpg, data=mtcars, size=qsec, color=factor(carb), shape=factor(cyl), geom="point")
+
+# geom="line"
+qplot(mpg, wt, data=mtcars, color=factor(cyl), geom="line")
+
+# geom="smooth"
+qplot(wt, mpg, data=mtcars, geom=c("point", "smooth"))
+
+
+# 2. ggplot()함수
+
+# (1) aes(x,y,color) 옵션 
+# aes(x,y,color) 속성 = aesthetics : 미학
+p<-ggplot(diamonds, aes(x=carat, y=price, color=cut))
+p+geom_point()  # point 추가
+
+# (2) geom_line() 레이어 추가 
+p+geom_line() # line 추가
+
+# (3) geom_point()함수  레이어 추가
+p<- ggplot(mtcars, aes(mpg,wt,color=factor(cyl)))
+p+geom_point()  # point 추가
+
+# (4) geom_step() 레이어 추가
+p+geom_step()  # step 추가
+
+# (5) geom_bar() 레이어 추가
+p<- ggplot(diamonds, aes(clarity))
+p+geom_bar(aes(fill=cut), position="fill")  # bar 추가
+
+ 
+# 3. ggsave()함수 
+# save image of plot on disk 
+#geom_point()함수 - 결과 동일 
+p<-ggplot(diamonds, aes(carat, price, color=cut))
+p+geom_point()  # point 추가
+ggsave(file="C:/Rwork-I/output/diamond_price.pdf") # 가장 최근 그래프 저장
+ggsave(file="C:/Rwork-I/output/diamond_price.jpg", dpi=72)
+
+# 변수에 저장된 그래프 저장 
+p<- ggplot(diamonds, aes(clarity))
+p<- p+geom_bar(aes(fill=cut), position="fill")  # bar 추가
+ggsave(file="C:/Rwork-I/output/bar.png", plot=p, width=10, height=5)

@@ -1,0 +1,51 @@
+﻿#########################################
+# 4. <<식료품점 파일 예제>> 
+#########################################
+
+library(arules)
+
+# transactions 데이터 가져오기
+data("Groceries")  # 식료품점 데이터 로딩
+str(Groceries) # Formal class 'transactions' [package "arules"] with 4 slots
+Groceries
+
+
+# [data.frame 형 변환]
+Groceries.df<- as(Groceries, "data.frame")
+head(Groceries.df)
+
+#itemFrequencyPlot(Groceries, topN=20, type="absolute") # 상위 20개 토픽
+# 지지도 0.001, 신뢰도 0.9
+
+rules <- apriori(Groceries, parameter=list(supp=0.001, conf=0.8))
+
+inspect(rules) 
+# 규칙을 구성하는 왼쪽(LHS) -> 오른쪽(RHS)의 item 빈도수 보기  
+plot(rules, method="grouped")
+
+# 최대 길이 3이내로 규칙 생성
+rules <- apriori(Groceries, parameter=list(supp=0.001, conf=0.80, maxlen=3))
+inspect(rules) # 29개 규칙
+
+# confidence(신뢰도) 기준 내림차순으로 규칙 정렬
+rules <- sort(rules, decreasing=T, by="confidence")
+inspect(rules) 
+
+library(arulesViz) # rules값 대상 그래프를 그리는 패키지
+plot(rules, method="graph", control=list(type="items"))
+
+#######################################
+### 특정 item 서브셋 작성/시각화
+#######################################
+
+# 오른쪽 item이 전지분유(whole milk)인 규칙만 서브셋으로 작성
+wmilk <- subset(rules, rhs %in% 'whole milk') # lhs : 왼쪽 item
+wmilk # set of 18 rules 
+inspect(wmilk)
+plot(wmilk, method="graph") #  연관 네트워크 그래프
+
+# 오른쪽 item이 other vegetables인 규칙만 서브셋으로 작성
+oveg <- subset(rules, rhs %in% 'other vegetables') # lhs : 왼쪽 item
+oveg # set of 10 rules 
+inspect(oveg)
+plot(oveg, method="graph") #  연관 네트워크 그래프

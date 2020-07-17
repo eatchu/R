@@ -1,0 +1,5 @@
+# 데이터 셋 제공 사이트 
+# http://www.public.iastate.edu/~hofmann/data_in_r_sortable.html - Datasets in R packages
+# https://vincentarelbundock.github.io/Rdatasets/datasets.html
+# https://r-dir.com/reference/datasets.html - Dataset site
+# http://www.rdatamining.com/resources/data

@@ -1,0 +1,40 @@
+﻿######################################################
+# 회귀분석(Regression Analysis)
+######################################################
+# - 특정 변수(독립변수:설명변수)가 다른 변수(종속변수:반응변수)에 어떠한 영향을 미치는가 분석
+
+###################################
+## 1. 단순회귀분석 
+###################################
+# - 독립변수와 종속변수가 1개인 경우
+
+# 단순선형회귀 모델 생성  
+# 형식) lm(formula= y ~ x 변수, data) 
+
+product <- read.csv("D:/NCS/R-II/data/product.csv", header=TRUE)
+head(product) # 친밀도 적절성 만족도(등간척도 - 5점 척도)
+
+str(product) # 'data.frame':  264 obs. of  3 variables:
+y = product$제품_만족도 # 종속변수
+x = product$제품_적절성 # 독립변수
+df <- data.frame(x, y)
+
+# 회귀모델 생성 
+result.lm <- lm(formula=y ~ x, data=df)
+result.lm # 회귀계수 
+
+# 회귀모델 예측 
+predict(result.lm, data.frame(x=5) ) 
+
+# (2) 선형회귀 분석 결과 보기
+summary(result.lm)
+
+# (3) 단순선형회귀 시각화
+# x,y 산점도 그리기 
+plot(formula=y ~ x, data=df)
+# 회귀분석
+result.lm <- lm(formula=y ~ x, data=df)
+# 회귀선 
+abline(result.lm, col='red')
+
+

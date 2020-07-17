@@ -1,0 +1,61 @@
+﻿#2) 이원카이제곱 - 교차분할표 이용
+
+################################
+# (1) 독립성/관련성 검정 
+################################  
+# - 동일 집단의 두 변인(학력수준과 대학진과 여부)을 대상으로 관련성이 있는가 없는가?
+
+# 귀무가설 : 부모의 학력수준과 자녀의 대학진학 여부와 관련성이 없다.
+# 대립가설 : 부모의 학력수준과 자녀의 대학진학 여부와 관련성이 있다.
+
+# 독립변수(x)와 종속변수(y) 생성 
+x <- data$level2 # 부모의 학력수준
+y <- data$pass2 # 자녀의 대학진학여부 
+
+CrossTable(x, y, chisq = TRUE) #p =  0.2507057    
+#Pearson's Chi-squared test 
+
+# <논문에서 교차분석과 카이제곱 검정 결과 제시방법>
+
+################################
+# (2) 동질성 검정 
+################################
+# 두 집단의 분포가 동일한가? 다른 분포인가?
+# 예) 교육방법에 따른 만족도 : 집단 간 차이가 없다.(동질성 검정)
+
+# 1. 파일 가져오기
+setwd("C:/SUNMOON/Rwork-I/Part-III")
+data <- read.csv("homogenity.csv", header=TRUE)
+head(data) 
+# method와 survery 변수만 서브셋 생성
+data <- subset(data, !is.na(survey), c(method, survey)) 
+
+# 2. 변수리코딩 - 코딩 변경
+# method: 1:방법1, 2:방법2, 3:방법3 
+# survey: 1:매우만족, 2:만족, 3:보통, 4: 불만족, 5: 매우불만족
+
+# 교육방법2 필드 추가
+data$method2[data$method==1] <- "방법1" 
+data$method2[data$method==2] <- "방법2"
+data$method2[data$method==3] <- "방법3"
+
+# 만족도2 필드 추가
+data$survey2[data$survey==1] <- "매우만족"
+data$survey2[data$survey==2] <- "만족"
+data$survey2[data$survey==3] <- "보통"
+data$survey2[data$survey==4] <- "불만족"
+data$survey2[data$survey==5] <- "매우불만족"
+
+
+# 3. 교차분할표 작성 
+table(data$method2, data$survey2)  # 교차표 생성 -> table(행,열)
+#         만족 매우만족 매우불만족 보통 불만족
+# 방법1    8        5          6   15     16 -> 50
+# 방법2   14        8          6   11     11 -> 50
+# 방법3    7        8          9   11     15 -> 50
+# 주의 : 반드시 각 집단별 길이(50)가 같아야 한다.
+
+# 4. 동질성 검정 - 모수 특성치에 대한 추론검정  
+chisq.test(data$method2, data$survey2) 
+
+# 5. 동질성 검정 해석

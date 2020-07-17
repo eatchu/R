@@ -1,0 +1,42 @@
+﻿# 데이터프레임 생성
+# - 교차표 생성을 위한 데이터셋 만들기
+
+#  1)  실습파일 가져오기
+setwd("C:/ITWILL/2_Rwork/Part-III")
+data <- read.csv("cleanDescriptive.csv", header=TRUE)
+data # 확인
+
+head(data) # 변수 확인
+
+# 2) 변수 추출
+x <- data$level2 # 리코딩 변수 이용
+y <- data$pass2 # 리코딩 변수 이용
+
+
+# 3) 데이터프레임 생성 
+df <- data.frame(Level=x, Pass=y) # 데이터 프레임 생성 
+
+#######################
+##  1. 교차분석
+#######################
+# - 교차분할표를 통해서 범주형 변수의 관계를 분석하는 방법
+
+# 1) 교차분할표 생성  
+table(df) # 빈도보기
+    
+# 2) package를 이용한 교차분할표 생성
+install.packages("gmodels") # gmodels 패키지 설치
+library(gmodels) # CrossTable() 함수 사용
+
+# 3) diamond의 cut과 color에 대한 교차분할표 생성
+library(ggplot2) # diamonds 데이터 셋 사용
+
+CrossTable(x=diamonds$color, y=diamonds$cut) 
+  
+#----------------------------------------------------------------------------
+# <실습> 부모의 학력수준이 자녀의 대학진학에 영향이 있는가를   
+#        알아보기 위해서 다음과 같이 교차분석을 수행하시오.
+#----------------------------------------------------------------------------
+#<조건1> CrossTable()함수 이용
+#<조건2> 변수모델링 : 부모학력수준(x) -> 자녀대학진학여부(y)
+

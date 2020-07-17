@@ -1,0 +1,30 @@
+
+# 차트 데이터 생성
+chart_data <- c(305,450, 320, 460, 330, 480, 380, 520) 
+names(chart_data) <- c("2016 1분기","2017 1분기","2016 2분기","2017 2분기","2016 3분기","2017 3분기","2016 4분기","2017 4분기")
+str(chart_data)
+chart_data
+
+
+#########################
+### 3차원 산점도 
+#########################
+install.packages('scatterplot3d')
+library(scatterplot3d)
+
+# 꽃의 종류별 분류 
+iris_setosa = iris[iris$Species == 'setosa',]
+iris_versicolor = iris[iris$Species == 'versicolor',]
+iris_virginica = iris[iris$Species == 'virginica',]
+
+# scatterplot3d(밑변, 오른쪽변, 왼쪽변, type='n') # type='n' : 기본 산점도 제외 
+d3 <- scatterplot3d(iris$Petal.Length, iris$Sepal.Length, iris$Sepal.Width, type='n')
+
+d3$points3d(iris_setosa$Petal.Length, iris_setosa$Sepal.Length,
+            iris_setosa$Sepal.Width, bg='orange', pch=21)
+
+d3$points3d(iris_versicolor$Petal.Length, iris_versicolor$Sepal.Length,
+            iris_versicolor$Sepal.Width, bg='blue', pch=23)
+
+d3$points3d(iris_virginica$Petal.Length, iris_virginica$Sepal.Length,
+            iris_virginica$Sepal.Width, bg='green', pch=25)

@@ -1,0 +1,35 @@
+﻿# 3. 계층형 군집분석에 그룹수 지정
+# iris의 계층형군집결과에 그룹수를 지정하여 그룹수 만큼 
+# 잘라서 iris의 1번째(Sepal.Length)와 3번째(Petal.Length) 변수를 
+# 대상으로 클러스터별 변수의 평균 구하기 
+
+# 1) 유클리드 거리 계산 
+idist<- dist(iris[1:4]) # dist(iris[, -5])
+
+# 2) 계층형 군집분석(클러스터링)
+hc <- hclust(idist)
+hc
+plot(hc, hang=-1)
+rect.hclust(hc, k=3, border="red") # 3개 그룹수 
+
+# 3) 그룹수 만들기 : cutree()함수 -> 지정된 그룹수 만큼 자르기
+# 형식) cutree(계층형군집결과, k=그룹수) -> 그룹수 만큼 자름
+ghc<- cutree(hc, k=3) # stats 패키지 제공
+
+ghc #  150개(그룹을 의미하는 숫자(1~3) 출력)
+
+# 4) iris에서 ghc 컬럼 추가
+iris$ghc <- ghc
+table(iris$ghc) # ghc 빈도수
+head(iris,60) # ghc 칼럼 확인 
+
+# 5) 그룹별 요약통계량 구하기
+g1 <- subset(iris, ghc==1)
+summary(g1[1:4])
+
+g2 <- subset(iris, ghc==2)
+summary(g2[1:4])
+
+g3 <- subset(iris, ghc==3)
+summary(g3[1:4])
+

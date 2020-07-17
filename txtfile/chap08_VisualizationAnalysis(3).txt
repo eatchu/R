@@ -1,0 +1,29 @@
+﻿
+##########################################
+# 3. ggmap 패키지
+##########################################
+#공간시각화
+# 공간 시각화는 지도를 기반으로 하기 때문에 
+# 표현방법 : 레이어 형태로 추가하여 시각화
+# 영역 : 데이터에 따른 색상과 크기 표현
+##########################################         
+
+
+# 지도 관련 패키지 설치
+install.packages("ggmap")
+library(ggmap) # get_stamenmap()
+library(ggplot2) # geom_point(), geom_text(), ggsave()
+
+#ge <- geocode('seoul') # 인증 key 필요
+
+# 서울 : 위도(left), 경도(bottom) : 126.97797  37.56654  -> google 지도에서 검색 
+# 서울 중심 좌표 : 위도 중심 좌우(126.8 ~ 127.2), 경도 중심 하상(37.38~37.6) 
+seoul <- c(left = 126.77, bottom = 37.40, 
+           right = 127.17, top = 37.70)
+map <- get_stamenmap(seoul, zoom=12,  maptype='terrain')#'toner-2011')
+ggmap(map) # maptype : terrain, watercolor
+
+# 대구 중심 남쪽 대륙 지도 좌표 : 35.829355, 128.570088
+# 대구 위도와 경도 기준으로 남한 대륙 지도  
+daegu <- c(left = 123.4423013, bottom = 32.8528306, 
+           right = 131.601445, top = 38.8714354)

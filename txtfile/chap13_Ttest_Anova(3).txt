@@ -1,0 +1,78 @@
+﻿############################################
+# 추론통계분석 - 3-1. 두 집단 이상 비율차이 검정
+############################################
+# - 두 집단 이상 비율차이 검정
+
+# 1. 파일가져오기 
+data <- read.csv("three_sample.csv", header=TRUE)
+data
+
+# 2. 두 집단 이상 subset 작성(데이터 정제,전처리) 
+method <- data$method 
+survey<- data$survey
+method
+survey 
+
+# 3.기술통계량(빈도분석)
+table(method, useNA="ifany") # 50 50 50 -> 3그룹 모두 관찰치 50개
+table(method, survey, useNA="ifany") # 그룹별 클릭수 : 1-43, 2-34, 3-37
+
+
+# 4. 두 집단 이상 비율차이 검정
+# prop.test(그룹별 빈도, 그룹수) -> 집단이 늘어나도 동일한 함수 사용-땡큐
+prop.test(c(34,37,39), c(50,50,50)) # p-value = 0.1165 -> 귀무가설 채택
+
+
+############################################
+# 추론통계분석 - 3-2. 두 집단 이상 평균차이 검정
+############################################
+# 두 집단 이상 평균차이 검정 
+
+# 1. 파일 가져오기
+data <- read.csv("three_sample.csv")
+
+# 2. 데이터 정제/전처리 - NA, outline 제거
+data <- subset(data, !is.na(score), c(method, score)) 
+data # method, score
+
+# (1) 차트이용 - ontlier 보기(데이터 분포 현황 분석)
+plot(data$score) # 차트로 outlier 확인 : 50이상과 음수값
+barplot(data$score) # 바 차트
+mean(data$score) # 14.45
+
+# (2) outlier 제거 - 평균(14) 이상 제거
+length(data$score)#91
+data2 <- subset(data, score <= 14) # 14이상 제거
+length(data2$score) #88(3개 제거)
+
+# (3) 정제된 데이터 보기 
+x <- data2$score
+boxplot(x)
+plot(x)
+
+# 3. 집단별 subset 작성
+# method: 1:방법1, 2:방법2, 3:방법3
+data2$method2[data2$method==1] <- "방법1" 
+data2$method2[data2$method==2] <- "방법2"
+data2$method2[data2$method==3] <- "방법3"
+
+table(data2$method2) # 교육방법 별 빈도수 
+
+# 4. 동질성 검정 - 정규성 검정
+# bartlett.test(종속변수 ~ 독립변수) # 독립변수(세 집단)
+bartlett.test(score ~ method2, data=data2)
+
+# 귀무가설 : 집단 간 분포의 모양이 동질적이다.
+# 해설 : 유의수준 0.05보다 크기 때문에 귀무가설을 기각할 수 없다. 
+
+# 동질한 경우 : aov() - Analysis of Variance(분산분석)
+# 동질하지 않은 경우 - kruskal.test()
+
+# 5. 분산검정(집단이 2개 이상인 경우 분산분석이라고 함)
+# aov(종속변수 ~ 독립변수, data=data set)
+
+# 귀무가설 : 집단 간 평균에 차이가 없다.
+result <- aov(score ~ method2, data=data2)
+
+# aov()의 결과값은 summary()함수를 사용해야 p-value 확인 
+summary(result) 

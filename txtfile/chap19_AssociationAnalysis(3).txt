@@ -1,0 +1,53 @@
+﻿##############################################
+# 3. 연관규칙 시각화(Adult 데이터 셋 이용)
+##############################################
+
+data(Adult) # arules에서 제공되는 내장 데이터 로딩
+str(Adult) # Formal class 'transactions' , 48842(행)
+Adult
+
+attributes(Adult)# 트랜잭션의 변수와 범주 보기
+################ Adult 데이터 셋 #################
+# 32,000개의 관찰치와 15개의 변수로 구성되어 있음
+# 종속변수에 의해서 년간 개인 수입이 5만달러 이상 인지를
+# 예측하는 데이터 셋으로 transactions 데이터로 읽어온
+# 경우 48,842행과 115 항목으로 구성된다.
+##################################################
+
+
+# [data.frame 형식으로 보기] - 트랜잭션 데이터를 데이터프레임으로 변경 
+adult<- as(Adult, "data.frame") # data.frame형식으로 변경 
+str(adult) # 'data.frame':	48842 obs. of  2 variables:
+head(adult) # 칼럼 내용 보기 
+
+# 요약 통계량
+summary(Adult)
+
+
+#---------------------------------------------------------------
+# 신뢰도 80%, 지지도 10%이 적용된 연관규칙 6137 발견   
+#----------------------------------------------------------------
+ar<- apriori(Adult, parameter = list(supp=0.1, conf=0.8))
+ar1<- apriori(Adult, parameter = list(supp=0.2)) # 지도도 높임
+ar2<- apriori(Adult, parameter = list(supp=0.2, conf=0.95)) # 신뢰도 높임
+ar3<- apriori(Adult, parameter = list(supp=0.3, conf=0.95)) # 신뢰도 높임
+ar4<- apriori(Adult, parameter = list(supp=0.35, conf=0.95)) # 신뢰도 높임
+ar5<- apriori(Adult, parameter = list(supp=0.4, conf=0.95)) # 신뢰도 높임
+
+# 결과보기
+inspect(head(ar5)) # 상위 6개 규칙 제공 -> inspect() 적용
+
+# confidence(신뢰도) 기준 내림차순 정렬 상위 6개 출력
+inspect(head(sort(ar5, decreasing=T, by="confidence")))
+
+# lift(향상도) 기준 내림차순 정렬 상위 6개 출력
+inspect(head(sort(ar5, by="lift"))) 
+
+
+## 연관성 규칙에 대한 데이터 시각화를 위한 패키지
+install.packages("arulesViz") 
+library(arulesViz) # rules값 대상 그래프를 그리는 패키지
+
+plot(ar3) # 지지도(support), 신뢰도(conf) , 향상도(lift)에 대한 산포도
+plot(ar4, method="graph") #  연관규칙 네트워크 그래프
+# 각 연관규칙 별로 연관성 있는 항목(item) 끼리 묶여서 네트워크 형태로 시각화

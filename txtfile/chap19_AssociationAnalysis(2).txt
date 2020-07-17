@@ -1,0 +1,50 @@
+﻿#########################################
+# 2. 트랜잭션 객체 생성 
+#########################################
+
+#형식)
+#read.transactions(file, format=c("basket", "single"),
+#      sep = NULL, cols=NULL, rm.duplicates=FALSE,encoding="unknown")
+#------------------------------------------------------
+#file : file name
+#format : data set의 형식 지정(basket 또는 single)
+  # -> single : 데이터 구성(2개 칼럼) -> transaction ID에 의해서 상품(item)이 대응된 경우
+  # -> basket : 데이터 셋이 여러개의 상품으로 구성 -> transaction ID 없이 여러 상품(item) 구성
+#sep : 상품 구분자
+#cols : single인 경우 읽을 컬럼 수 지정, basket은 생략(transaction ID가 없는 경우)
+#rm.duplicates : 중복 트랜잭션 항목 제거
+#encoding : 인코딩 지정
+#------------------------------------------------------
+
+# (1) single 트랜잭션 객체 생성
+## read demo data - sep 생략 : 공백으로 처리, single인 경우 cols 지정 
+# format = "single" : 1개의 transaction id에 의해서 item이 연결된 경우 
+setwd("C:/SUNMOON/2_Rwork/Part-IV")
+stran <- read.transactions("demo_single",format="single",cols=c(1,2)) 
+inspect(stran)
+
+# <실습> 중복 트랜잭션 객체 생성
+stran2<- read.transactions("single_format.csv", format="single", sep=",", 
+                           cols=c(1,2), rm.duplicates=T)
+stran2
+
+summary(stran2) # 248개 트랜잭션에 대한 기술통계 제공
+
+
+# 트랜잭션 보기
+inspect(stran2) # 248 트랜잭션 확인 
+
+# 규칙 발견
+astran2 <- apriori(stran2) # supp=0.1, conf=0.8와 동일함 
+#astran2 <- apriori(stran2, parameter = list(supp=0.1, conf=0.8))
+astran2 # set of 102 rules
+attributes(astran2)
+inspect(astran2)
+
+# 향상도가 높은 순서로 정렬 
+inspect(sort(astran2, by="lift"))
+inspect(head(sort(astran2, by="lift")))
+
+# (2) basket 트랜잭션 데이터 가져오기
+btran <- read.transactions("demo_basket",format="basket",sep=",") 
+inspect(btran) # 트랜잭션 데이터 보기

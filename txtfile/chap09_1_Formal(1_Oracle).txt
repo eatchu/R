@@ -1,0 +1,33 @@
+﻿# chap09_1_Formal(1_Oracle)
+
+########################################
+## Chapter09-1. 정형데이터 처리 
+########################################
+
+# Oracle DB 정형 데이터 처리
+
+# 1. 패키지 설치
+# - RJDBC 패키지를 사용하기 위해서는 우선 java를 설치해야 한다.
+#install.packages("rJava")
+install.packages("DBI")
+install.packages("RJDBC")
+
+# 2. 패키지 로딩
+library(DBI)
+Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_111')
+library(rJava)
+library(RJDBC) # rJava에 의존적이다.(rJava 먼저 로딩)
+
+# 3) Oracle 연동   
+
+############ Oracle 11g ##############
+# driver  object
+drv<-JDBC("oracle.jdbc.driver.OracleDriver", 
+          "C:/oraclexe/app/oracle/product/11.2.0/server/jdbc/lib/ojdbc6.jar")
+# db연동(driver, url,uid,upwd)  object 
+conn<-dbConnect(drv, "jdbc:oracle:thin:@//127.0.0.1:1521/xe","scott","tiger")
+####################################
+
+
+
+
