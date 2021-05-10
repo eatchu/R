@@ -34,4 +34,4 @@ _이 레파지토리를 통하여 R을 활용해 간단한 코드 작성부터 �
 ### **[연습문제](./exams)**
  - 실습 후 연습문제를 풀어보실 수 있습니다.
 
-### **Semi Project**
+### **[Semi-Project](./semi_project/bigdata)**
